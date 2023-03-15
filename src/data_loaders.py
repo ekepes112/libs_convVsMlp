@@ -2,30 +2,30 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-def load_chemcam(dataset_type):
+def load_chemcam(data_path,dataset_type):
     subfolder = 'chemcam/extended'
 
     data = pd.read_csv(
-      DATA_PATH.joinpath(
-          f'{subfolder}/{dataset_type}/data.csv'
-      ),
-      index_col=0
+        data_path.joinpath(
+            f'{subfolder}/{dataset_type}/data.csv'
+        ),
+        index_col=0
     )
 
     wvl = pd.read_csv(
-      DATA_PATH.joinpath(
-          f'{subfolder}/{dataset_type}/metadata_wvl.csv'
-      ),
-      index_col=0
+        data_path.joinpath(
+            f'{subfolder}/{dataset_type}/metadata_wvl.csv'
+        ),
+        index_col=0
     )
 
     wvl = np.squeeze(wvl.to_numpy())
 
     metadata = pd.read_csv(
-      DATA_PATH.joinpath(
-          f'{subfolder}/{dataset_type}/metadata_composition.csv'
-      ),
-      index_col=0
+        data_path.joinpath(
+            f'{subfolder}/{dataset_type}/metadata_composition.csv'
+        ),
+        index_col=0
     )
 
     return(data,wvl,metadata)
