@@ -17,18 +17,18 @@ def mask_wvl(wvl:np.array,masks:list):
 def normalize_area(
     spectra: pd.DataFrame,
     wvl: np.array,
-    ranges: list = []
+    wvl_ranges: list = []
 ) -> np.array:
     """
     RETURN a spectrum with unit area <spectrum_proc>:np.array
     """
     log.info(f'spectra shape {spectra.shape}')
-    if len(ranges) == 0:
+    if len(wvl_ranges) == 0:
         return(spectra / spectra.sum(axis=0))
 
-    for range in ranges:
-      log.debug(f'processing range {range}')
-      ndx = np.where((wvl >= range[0]) & (wvl <= range[1]))[0]
+    for wvl_range in wvl_ranges:
+      log.debug(f'processing range {wvl_range}')
+      ndx = np.where((wvl >= wvl_range[0]) & (wvl <= wvl_range[1]))[0]
       log.debug(f'indices to sum over {ndx}')
       spectra.iloc[:,ndx] = spectra.iloc[:,ndx].divide(
           spectra.iloc[:,ndx].sum(axis=1),
