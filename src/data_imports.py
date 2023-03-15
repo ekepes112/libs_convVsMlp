@@ -1,4 +1,8 @@
-def import_chemcam(dataset_type):
+import numpy as np
+import pandas as pd
+from pathlib import Path
+
+def load_chemcam(dataset_type):
     subfolder = 'chemcam/extended'
 
     data = pd.read_csv(
