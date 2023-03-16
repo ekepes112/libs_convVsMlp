@@ -5,11 +5,23 @@ import logging
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 
-def mask_wvl(wvl:np.array,masks:list):
+def mask_wvl(
+    wvl:np.array,
+    masks:list
+) -> np.array:
+    """_summary_
+
+    Args:
+        wvl (np.array): _description_
+        masks (list): _description_
+
+    Returns:
+        np.array: _description_
+    """
     keep_mask = np.array([True]*len(wvl))
     for mask in masks:
         keep_mask[
-            np.where((wvl >= mask[0]) & (wvl_cc <= mask[1]))
+            np.where((wvl >= mask[0]) & (wvl <= mask[1]))
         ] = False
     return(keep_mask)
 
@@ -18,7 +30,7 @@ def normalize_area(
     spectra: pd.DataFrame,
     wvl: np.array,
     wvl_ranges: list = []
-) -> np.array:
+) -> pd.DataFrame:
     """
     RETURN a spectrum with unit area <spectrum_proc>:np.array
     """

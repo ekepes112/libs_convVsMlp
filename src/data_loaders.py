@@ -2,7 +2,10 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-def load_chemcam_old(data_path,dataset_type):
+def load_chemcam_old(
+    data_path:Path,
+    dataset_type:str
+) -> tuple:
     subfolder = 'chemcam/extended'
 
     data = pd.read_csv(
@@ -31,7 +34,10 @@ def load_chemcam_old(data_path,dataset_type):
     return(data,wvl,metadata)
 
 
-def load_supercam_old(data_path,dataset_type):
+def load_supercam_old(
+    data_path:Path,
+    dataset_type:str
+) -> tuple:
     subfolder = 'supercam'
 
     data = pd.read_csv(
