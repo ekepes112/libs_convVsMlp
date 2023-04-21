@@ -56,11 +56,6 @@ def estimate_learnig_rate(
         else:
             return (lr * exp(step_size))
 
-    if clone_model:
-        model = models.clone_model(base_model)
-    else:
-        model = base_model
-
     for optimizer_name in tried_optimizers:
         save_path = results_path.joinpath(
             f'lr_estimates/{base_model.name}_{optimizer_name}.html'
@@ -71,6 +66,11 @@ def estimate_learnig_rate(
             return (None)
 
         print(f'Estimating {optimizer_name}')
+
+        if clone_model:
+            model = models.clone_model(base_model)
+        else:
+            model = base_model
 
         init_lr = tried_optimizers.get(optimizer_name).learning_rate
         epoch_count = int(
