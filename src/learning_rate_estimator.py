@@ -12,7 +12,9 @@ from graph_utils import _update_layout
 
 def guess_learning_rate(fit_history: pd.DataFrame) -> float:
     tresholded_losses = fit_history.loc[
-        fit_history.loc[:, 'loss'] < (fit_history.loc[:, 'loss'].max() * 0.9),
+        fit_history.loc[:, 'loss'] < (
+            fit_history.loc[:, 'loss'].iloc[:10].max() * 0.9
+        ),
         :
     ]
 
