@@ -61,7 +61,8 @@ def estimate_learnig_rate(
 
     for optimizer_name in tried_optimizers:
         save_path = results_path.joinpath(
-            f'lr_estimates/{base_model.name}_{optimizer_name}.html'
+            # f'lr_estimates/{base_model.name}_{optimizer_name}.html'
+            {base_model.name}_{optimizer_name}.html'
         )
         if save_path.exists() and not overwrite_existing:
             print(f'Loading in training history for {optimizer_name}')
