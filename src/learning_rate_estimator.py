@@ -46,7 +46,8 @@ def estimate_learnig_rate(
     clone_model: bool = True,
     overwrite_existing: bool = False,
     return_data: bool = False,
-    training_verbosity: int = 0
+    training_verbosity: int = 0,
+    save_fig: bool = True
 ):
 
     if not results_path.joinpath('lr_estimates').is_dir():
@@ -129,7 +130,8 @@ def estimate_learnig_rate(
             y="Loss"
         )
         fig.show()
-        fig.write_html(save_path)
+        if save_fig:
+            fig.write_html(save_path)
 
         try:
             lr_guess = guess_learning_rate(plot_data)
