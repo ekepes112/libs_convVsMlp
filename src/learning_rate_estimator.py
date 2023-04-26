@@ -61,8 +61,7 @@ def estimate_learnig_rate(
 
     for optimizer_name in tried_optimizers:
         save_path = results_path.joinpath(
-            # f'lr_estimates/{base_model.name}_{optimizer_name}.html'
-            {base_model.name}_{optimizer_name}.html'
+            f'lr_estimates/{base_model.name}_{optimizer_name}.html'
         )
         if save_path.exists() and not overwrite_existing:
             print(f'Loading in training history for {optimizer_name}')
@@ -137,7 +136,7 @@ def estimate_learnig_rate(
         try:
             lr_guess = guess_learning_rate(plot_data)
         except:
-            lr_guess = np.nan
+            lr_guess = 3e-4
 
         with open(save_path.with_suffix('.txt'), 'w') as file:
             file.write(f'{lr_guess}')
