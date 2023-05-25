@@ -39,6 +39,8 @@ def compile_model(
     x = GlobalAveragePooling1D()(x)
     x = Flatten()(x)
 
+    x = Dense(units=1048)(x)
+
     model_output = Dense(
         1,
         activation='relu',
