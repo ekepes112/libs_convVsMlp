@@ -15,7 +15,8 @@ def compile_model(
     optimizer: opt.Optimizer = None,
     loss_func: str = None,
     eval_metrics: list = [],
-    model_id: str = 'prototype'
+    model_id: str = 'prototype',
+    add_batch_norm: bool = True
 ):
     model_id = f'li2021a_{model_id}'
     if optimizer is None:
@@ -29,13 +30,14 @@ def compile_model(
         strides=2,
         padding='same'
     )(model_input)
-    x = BatchNormalization()(x)
+    if add_batch_norm:
+        x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = MaxPool1D(pool_size=2)(x)
-    x = residual_block(x, kernel_counts=64)
-    x = residual_block(x, kernel_counts=64)
-    x = residual_block(x, kernel_counts=128)
-    x = residual_block(x, kernel_counts=128)
+    x = residual_block(x, kernel_counts=64, add_batch_norm)
+    x = residual_block(x, kernel_counts=64, add_batch_norm)
+    x = residual_block(x, kernel_counts=128, add_batch_norm)
+    x = residual_block(x, kernel_counts=128, add_batch_norm)
     x = GlobalAveragePooling1D()(x)
     x = Flatten()(x)
 
