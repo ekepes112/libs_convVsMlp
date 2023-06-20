@@ -41,8 +41,8 @@ def compile_model(
         for _ in range(3):
             x = residual_block_simple(
                 input_layer=x,
-                filters=64, # see motivation above, the scaling is not exact
-                kernel_size: int = 3,
+                filters=64,  # see motivation above, the scaling is not exact
+                kernel_size=3,
             )
         x = MaxPool1D(
             pool_size=2,
