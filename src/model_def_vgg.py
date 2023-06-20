@@ -18,6 +18,8 @@ def compile_model(
 ):
     if optimizer is None:
         optimizer = opt.Adam(learning_rate=3e-4)
+    if loss_func is None:
+        raise ValueError('No loss function specified')
 
     model_input = Input(shape=input_shape)
     x = Conv1D(
