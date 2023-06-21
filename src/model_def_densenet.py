@@ -43,7 +43,7 @@ def compile_model(
             kernel_size=1,
             strides=1,
             filters=32,
-        )
+        )(x)
         x = AveragePooling1D(
             pool_size=2,
             strides=2,
