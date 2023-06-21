@@ -98,5 +98,7 @@ def residual_block_concat(
         strides=1,
         padding='same'
     )(x)
-    x = Concatenate()([input_layer, x], axis=len(input_layer.shape))
+    x = Concatenate(
+        axis=len(input_layer.shape)
+    )([input_layer, x])
     return x
