@@ -1,7 +1,6 @@
 from tensorflow import optimizers as opt
 from keras.models import Model
 from keras.layers import Input, Conv1D, MaxPool1D
-from warnings import warn
 
 from ann_modules import prediction_head
 
@@ -16,6 +15,7 @@ def compile_model(
     model_id: str = 'prototype',
     prediction_sizes: list = [2048, 1024],
 ):
+    model_id = f'alexnet_{model_id}'
     if optimizer is None:
         optimizer = opt.Adam(learning_rate=3e-4)
     if loss_func is None:
@@ -77,8 +77,6 @@ def compile_model(
         name=model_id
     )
 
-    if not loss_func:
-        warn('Model compiled without loss function')
     model.compile(
         optimizer=optimizer,
         loss=loss_func,
