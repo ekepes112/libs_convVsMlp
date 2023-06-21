@@ -1,4 +1,4 @@
-from keras.layers import Conv1D, BatchNormalization, Activation, Add,
+from keras.layers import Conv1D, BatchNormalization, Activation, Add,\
     Concatenate
 
 
