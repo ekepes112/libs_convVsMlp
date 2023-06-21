@@ -1,7 +1,7 @@
 from tensorflow import optimizers as opt
 from keras.models import Model
-from keras.layers import Input, MaxPool1D, Conv1D, AveragePool1D,\
-    BatchNormalization, GlobalAveragePooling1D
+from keras.layers import Input, MaxPool1D, Conv1D, AveragePooling1D,\
+    BatchNormalization, GlobalAveragePooling1D, Activation
 
 from residual_modules import residual_block_concat
 from ann_modules import prediction_head
@@ -44,7 +44,7 @@ def compile_model(
             strides=1,
             filters=32,
         )
-        x = AveragePool1D(
+        x = AveragePooling1D(
             pool_size=2,
             strides=2,
         )(x)
