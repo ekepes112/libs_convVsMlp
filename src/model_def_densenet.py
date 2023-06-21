@@ -1,6 +1,7 @@
 from tensorflow import optimizers as opt
 from keras.models import Model
-from keras.layers import Input, MaxPool1D
+from keras.layers import Input, MaxPool1D, Conv1D, AveragePool1D,\
+    BatchNormalization, GlobalAveragePooling1D
 
 from residual_modules import residual_block_concat
 from ann_modules import prediction_head
@@ -16,6 +17,7 @@ def compile_model(
     model_id: str = 'prototype',
     prediction_sizes: list = [2048, 1024],
 ):
+    # https://arxiv.org/pdf/1608.06993v5.pdf
     model_id = f'densenet_{model_id}'
     if optimizer is None:
         optimizer = opt.Adam(learning_rate=3e-4)
@@ -23,20 +25,32 @@ def compile_model(
         raise ValueError('No loss function specified')
 
     model_input = Input(shape=input_shape)
-
-    x = MaxPool1D(pool_size=2)(model_input)
-    for _ in range(3):
+    x = Conv1D(
+        kernel_size=7,
+        strides=2,
+        filters=32,
+    )(model_input)
+    x = MaxPool1D(
+        pool_size=3,
+        strides=2,
+    )(x)
+    for _ in range(4):
         for _ in range(3):
             x = residual_block_concat(x)
-        x = MaxPool1D(pool_size=2)(x)
-
-    # x = Conv1D(
-    #     filters=1,
-    #     kernel_size=1,
-    #     strides=1,
-    #     padding='same',
-    #     activation='relu'
-    # )(x)
+        x = BatchNormalization()(x)
+        x = Activation('relu')(x)
+        x = Conv1D(
+            kernel_size=1,
+            strides=1,
+            filters=32,
+        )
+        x = AveragePool1D(
+            pool_size=2,
+            strides=2,
+        )(x)
+    for _ in range(3):
+        x = residual_block_concat(x)
+    x = GlobalAveragePooling1D()(x)
 
     output = prediction_head(
         x,
