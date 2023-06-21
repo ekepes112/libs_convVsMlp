@@ -2,7 +2,7 @@ from tensorflow import optimizers as opt
 from keras.models import Model
 from keras.layers import Input, Conv1D, MaxPool1D
 
-from cnn_modules import residual_block_simple
+from residual_modules import residual_block_simple
 from ann_modules import prediction_head
 
 
