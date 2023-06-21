@@ -1,6 +1,6 @@
 from tensorflow import optimizers as opt
 from keras.models import Model
-from keras.layers import Input, Conv1D
+from keras.layers import Input, Conv1D, Maxpool1D
 
 from residual_modules import residual_block_concat
 from ann_modules import prediction_head
@@ -24,17 +24,19 @@ def compile_model(
 
     model_input = Input(shape=input_shape)
 
-    x = residual_block_concat(model_input)
-    for _ in range(2):
-        x = residual_block_concat(x)
+    x = Maxpool1D(pool_size=2)(model_input)
+    for _ in range(3):
+        for _ in range(3):
+            x = residual_block_concat(x)
+        x = Maxpool1D(pool_size=2)(x)
 
-    x = Conv1D(
-        filters=1,
-        kernel_size=1,
-        strides=1,
-        padding='same',
-        activation='relu'
-    )(x)
+    # x = Conv1D(
+    #     filters=1,
+    #     kernel_size=1,
+    #     strides=1,
+    #     padding='same',
+    #     activation='relu'
+    # )(x)
 
     output = prediction_head(
         x,
