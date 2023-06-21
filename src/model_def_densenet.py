@@ -50,7 +50,7 @@ def compile_model(
         )(x)
     for _ in range(3):
         x = residual_block_concat(x)
-    x = GlobalAveragePooling1D()(x)
+    # x = GlobalAveragePooling1D()(x)
 
     output = prediction_head(
         x,
