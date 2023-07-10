@@ -85,5 +85,3 @@ class DenseNet1D():
         )
 
         return model
-
-
