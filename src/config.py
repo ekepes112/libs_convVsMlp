@@ -1,0 +1,1 @@
+MODEL_NAMES = ['alexnet', 'vgg', 'resnet_bottleneck', 'resnet_simple', 'densenet', 'resnet_bn']
