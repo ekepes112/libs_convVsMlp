@@ -1,4 +1,7 @@
 PROJECT_NAME = "convVsMlp"
+DRIVE_PATH = '/content/onedrive'
+RESULTS_PATH = '/content/gdrive/My Drive/projects/convVsMlp/temp'
+DATA_PATH = '.archive/datasets/'
 DATASET_TYPE = 'means'
 
 MODEL_NAMES = ['alexnet', 'vgg', 'resnet_bottleneck',
@@ -19,7 +22,7 @@ LR_SCAN_WARMUP = 10
 BATCH_SIZE = 64
 
 TRAIN_FOLDS = [1, 2, 4, 5]
-TEST_FOLDS = 3
+TEST_FOLD = 3
 COMPOUND_LIST = ['SiO2', 'TiO2', 'Al2O3', 'FeOT', 'MgO', 'CaO', 'Na2O', 'K2O']
 SHIFT_MAGNITUDES = [-3, -2, -1, 1, 2, 3]
 NORMALIZE_TO_UNIT_MAXIMUM = False
