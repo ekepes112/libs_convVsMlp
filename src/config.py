@@ -14,6 +14,22 @@ MODEL_PARAMS = {
     'resnet_simple': {},
     'densenet': {},
 }
+INITIAL_LEARNING_RATES = {
+    'alexnet': 5e-5,
+    'vgg': 3e-4,
+    'resnet_bottleneck': 2.5e-6,
+    'resnet_bn': 2e-5,
+    'resnet_simple': 1e-5,
+    'densenet': 3.5e-6,
+}
+OPTIMIZERS = {
+    'alexnet': 'Adam_8',
+    'vgg': 'Adam_9',
+    'resnet_bottleneck': 'Adam_6',
+    'resnet_bn': 'Adam_1',
+    'resnet_simple': 'Adam_1',
+    'densenet': 'Adam_5',
+}
 
 LR_SCAN_END = 1e-1
 LR_SCAN_START = 1e-8
