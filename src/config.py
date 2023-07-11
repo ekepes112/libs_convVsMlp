@@ -3,6 +3,7 @@ DRIVE_PATH = '/content/onedrive'
 RESULTS_PATH = '/content/gdrive/My Drive/projects/convVsMlp/temp'
 DATA_PATH = '.archive/datasets/'
 DATASET_TYPE = 'means'
+CHECKPOINT_DIR = '/content/checkpoints'
 
 MODEL_NAMES = ['alexnet', 'vgg', 'resnet_bottleneck',
                'resnet_simple', 'densenet', 'resnet_bn']
