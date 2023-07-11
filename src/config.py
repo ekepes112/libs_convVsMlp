@@ -1,7 +1,8 @@
 PROJECT_NAME = "convVsMlp"
 DATASET_TYPE = 'means'
 
-MODEL_NAMES = ['alexnet', 'vgg', 'resnet_bottleneck', 'resnet_simple', 'densenet', 'resnet_bn']
+MODEL_NAMES = ['alexnet', 'vgg', 'resnet_bottleneck',
+               'resnet_simple', 'densenet', 'resnet_bn']
 MODEL_PARAMS = {
     'alexnet': {},
     'vgg': {},
@@ -17,7 +18,8 @@ LR_SCAN_STEP_SIZE = .2
 LR_SCAN_WARMUP = 10
 BATCH_SIZE = 64
 
-TRAIN_FOLDS = [1,2,4,5]
+TRAIN_FOLDS = [1, 2, 4, 5]
 TEST_FOLDS = 3
-COMPOUND_LIST = ['SiO2','TiO2','Al2O3','FeOT','MgO','CaO','Na2O','K2O']
-SHIFT_MAGNITUDES = [-3,-2,-1,1,2,3]
+COMPOUND_LIST = ['SiO2', 'TiO2', 'Al2O3', 'FeOT', 'MgO', 'CaO', 'Na2O', 'K2O']
+SHIFT_MAGNITUDES = [-3, -2, -1, 1, 2, 3]
+NORMALIZE_TO_UNIT_MAXIMUM = False
