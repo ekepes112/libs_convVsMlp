@@ -14,10 +14,6 @@ class AlexNet1D():
         eval_metrics: list = [],
         model_id: str = 'prototype',
         prediction_head_params: dict = {},
-        # l1_dense: float = 0.,
-        # l2_dense: float = 0.,
-        # prediction_sizes: list = [2048, 1024],
-        # dropout_rate: float = 0.,
     ):
         if loss_func is None:
             raise ValueError('No loss function specified')
@@ -31,10 +27,6 @@ class AlexNet1D():
         self.eval_metrics = eval_metrics
         self.model_id = model_id
         self.prediction_head_params = prediction_head_params
-        # self.l1_dense = l1_dense
-        # self.l2_dense = l2_dense
-        # self.prediction_sizes = prediction_sizes
-        # self.dropout_rate: float = 0.,
         self.model_id = f'alexnet_{model_id}'
 
     def build(self):
@@ -84,9 +76,6 @@ class AlexNet1D():
         output = prediction_head(
             x,
             **self.prediction_head_params,
-            # layer_sizes=self.prediction_sizes,
-            # lambda_l1=self.l1_dense,
-            # lambda_l2=self.l2_dense,
         )
 
         model = Model(
