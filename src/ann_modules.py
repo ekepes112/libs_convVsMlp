@@ -1,4 +1,4 @@
-from keras.layers import Dense, Flatten
+from keras.layers import Dense, Flatten, Dropout
 from keras.regularizers import l1_l2
 from keras.initializers import HeNormal
 
@@ -8,9 +8,11 @@ def prediction_head(
     layer_sizes: list = [2048, 1024],
     lambda_l1: float = 0.,
     lambda_l2: float = 0.,
+    dropout_rate: float = 0.,
 ):
     x = Flatten()(input_layer)
     for l in layer_sizes:
+        x = Dropout(dropout_rate)(x)
         x = Dense(
             l,
             activation='relu',
@@ -20,6 +22,7 @@ def prediction_head(
                 l2=lambda_l2
             )
         )(x)
+    x = Dropout(dropout_rate)(x)
     x = Dense(
         1,
         activation='relu',
