@@ -186,7 +186,7 @@ if __name__ == '__main__':
             'end_lr':config_cv_optimizers.LR_SCAN_END,
             'step_size':config_cv_optimizers.LR_SCAN_STEP_SIZE,
             'warmup_count':config_cv_optimizers.LR_SCAN_WARMUP,
-            'batch_size':config_cv_optimizers.BATCH_SIZE,
+            'batch_size':config.BATCH_SIZE,
             'overwrite_existing':True,
             'return_data':False,
             'save_fig':False
