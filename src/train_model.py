@@ -39,8 +39,6 @@ def train_run(
         **config.SHARED_MODEL_PARAMS,
         input_shape=(predictors.shape[1],1),
     ).build()
-    # take the core model name
-    base_model_name = base_model.name.split('_')[0]
     # split the data names
     train_names = targets.loc[
         targets.loc[:,f'{compound}_Folds'] != fold,:
