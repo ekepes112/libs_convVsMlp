@@ -182,7 +182,7 @@ if __name__ == '__main__':
         predictors_path=cmd_args.predictors,
         targets_path=cmd_args.targets,
         lr_scan_params={
-            'results_path':config_cv_optimizers.RESULTS_PATH,
+            'results_path':Path(config_cv_optimizers.RESULTS_PATH),
             'end_lr':config_cv_optimizers.LR_SCAN_END,
             'step_size':config_cv_optimizers.LR_SCAN_STEP_SIZE,
             'warmup_count':config_cv_optimizers.LR_SCAN_WARMUP,
