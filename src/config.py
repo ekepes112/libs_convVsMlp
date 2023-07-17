@@ -15,6 +15,15 @@ MODEL_PARAMS = {
     'resnet_simple': {},
     'densenet': {},
 }
+SHARED_MODEL_PARAMS = {
+    'prediction_head_params':{
+        'lambda_l1':0.,
+        'lambda_l2':0.,
+        'dropout_rate':.4,
+    },
+    'loss_func':'mse',
+    'eval_metrics':[],
+}
 INITIAL_LEARNING_RATES = {
     'alexnet': 5e-5,
     'vgg': 3e-4,
@@ -32,12 +41,6 @@ OPTIMIZERS = {
     'densenet': 'Adam_5',
 }
 
-LR_SCAN_END = 1e-1
-LR_SCAN_START = 1e-8
-LR_SCAN_STEP_SIZE = .2
-LR_SCAN_WARMUP = 10
-BATCH_SIZE = 64
-CV_EPOCHS = 250
 TRAIN_EPOCHS = 500
 
 TRAIN_FOLDS = [1, 2, 4, 5]
