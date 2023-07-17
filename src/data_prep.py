@@ -54,7 +54,7 @@ if __name__ == '__main__':
     data = data.loc[:,mask_cond]
 
 
-    data = data.preprocessors.normalize_area(
+    data = data_preprocessors.normalize_area(
         data,
         wvl,
         spectral_ranges
