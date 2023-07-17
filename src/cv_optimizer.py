@@ -61,7 +61,8 @@ def cv_run(
         )(
             model_id='optimizer_cv',
             **config.MODEL_PARAMS.get(cmd_args.model),
-            **config.SHARED_MODEL_PARAMS
+            **config.SHARED_MODEL_PARAMS,
+            input_shape=(predictors.shape[1],1),
         ).build(),
         tried_optimizers=cv_utils.generate_optimizers(),
         **lr_scan_params
