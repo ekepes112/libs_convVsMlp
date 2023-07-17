@@ -8,7 +8,7 @@ import shutil
 from tensorflow import Variable
 from tensorflow.keras.models import clone_model
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
-from tensorflow.keras.checkpoints import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint
 import wandb
 from wandb.keras import WandbCallback
 
