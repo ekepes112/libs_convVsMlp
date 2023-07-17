@@ -134,7 +134,7 @@ def cv_run(
               .to_numpy()[...,np.newaxis],
             y=targets.loc[train_names,compound],
             batch_size=config.BATCH_SIZE,
-            epochs=config.CV_EPOCHS,
+            epochs=config_cv_optimizers.CV_EPOCHS,
             validation_data=(
                 predictors.loc[val_names,:]\
                   .to_numpy()[...,np.newaxis],
