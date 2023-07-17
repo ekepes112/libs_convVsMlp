@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 from tensorflow import Variable
 from tensorflow.keras.models import clone_model
-from tensorflow.keras.metric import RootMeanSquaredError, MeanAbsoluteError
+from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 import wandb
 from wandb.keras import WandbCallback
 
