@@ -17,6 +17,8 @@ def mask_wvl(
 
     Returns:
         np.array: _description_
+
+    https://doi.org/10.1016/j.sab.2016.12.003
     """
     keep_mask = np.array([True]*len(wvl))
     for mask in masks:
