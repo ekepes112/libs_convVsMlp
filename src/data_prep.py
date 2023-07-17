@@ -97,17 +97,11 @@ if __name__ == '__main__':
     ].index
 
     for data_type in ['train', 'test']:
-        np.save(
-            file=f'/content/{data_type}_targets.npy',
-            arr=targets.loc[
-                globals().get(f'{data_type}_names'),
-                cmd_args.compound
-            ].to_numpy()
-        )
-        np.save(
-            file=f'/content/{data_type}_predictors.npy',
-            arr=data.loc[
-                globals().get(f'{data_type}_names'),
-                :
-            ].to_numpy()
-        )
+        targets.loc[
+            globals().get(f'{data_type}_names'),
+            [cmd_args.compound,f'{cmd_args.compound}_Folds']
+        ].to_pickle(f'/content/{data_type}_targets.pkl')
+        data.loc[
+            globals().get(f'{data_type}_names'),
+            :
+        ].to_pickle(f'/content/{data_type}_predictors.pkl')
