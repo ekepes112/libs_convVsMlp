@@ -22,14 +22,18 @@ def cv_run(
     targets_path: str,
     lr_scan_params: dict
 ):
+    # load the data
+    targets = pd.read_pickle(targets_path)
+    predictors = pd.read_pickle(predictors_path)
+    # define model architecture
     base_model = model_loader.models.get(
         model_name,
         'Invalid model name'
     )(
         model_id='optimizer_cv_',
         **config.MODEL_PARAMS.get(model_name),
-        **config.SHARED_MODEL_PARAMS
-        'input_shape':(filtered_data_sc.shape[1],1),
+        **config.SHARED_MODEL_PARAMS,
+        input_shape=(predictors.shape[1],1),
     ).build()
     # take the core model name
     base_model_name = base_model.name.split('_')[0]
@@ -37,9 +41,6 @@ def cv_run(
     print(f'processing fold {fold}')
     # regenerate optimizers to reset their states
     explored_optimizers = cv_utils.generate_optimizers()
-    # load the data
-    targets = pd.read_pickle(targets_path)
-    predictors = pd.read_pickle(predictors_path)
     # split the data names
     train_names = targets.loc[
         targets.loc[:,f'{compound}_Folds'] != fold,:
