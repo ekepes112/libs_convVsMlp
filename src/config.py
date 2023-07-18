@@ -19,7 +19,7 @@ SHARED_MODEL_PARAMS = {
     'prediction_head_params':{
         'lambda_l1':0.,
         'lambda_l2':0.,
-        'dropout_rate':.4,
+        'dropout_rate':0.,
     },
     'loss_func':'mse',
     'eval_metrics':[],
