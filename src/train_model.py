@@ -16,6 +16,14 @@ import model_loader
 import config
 import cv_utils
 
+  """TODO
+      make the call more flexible if the function is imported
+      join the morel parameter dictionaries from the config file
+      overwrite the values from kwargs
+      make a config loader -> unique experiment id
+      make a dictionary of callbacks and select the callback using cmd arguments -> separate keys at ','
+  """
+
 def train_run(
     model_name: str,
     fold: int,
