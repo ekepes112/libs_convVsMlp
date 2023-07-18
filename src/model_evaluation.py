@@ -81,6 +81,4 @@ if __name__ == '__main__':
         weights_path=cmd_args.weights,
         predictors_path=cmd_args.predictors,
         targets_path=cmd_args.targets,
-        start_checkpoint_at=6.,
-        checkpoint_dir=Path(config.CHECKPOINT_DIR),
     )
