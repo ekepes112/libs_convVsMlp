@@ -99,7 +99,7 @@ def train_run(
     model = clone_model(base_model)
     model.compile(
         optimizer=optimizer,
-        loss='mse',
+        loss=model_params.get('loss_func'),
         metrics=[
             RootMeanSquaredError(),
             MeanAbsoluteError()

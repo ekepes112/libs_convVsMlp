@@ -16,26 +16,34 @@ def evaluate_model(
     compound: str,
     predictors_path: str,
     targets_path: str,
+    **kwargs
 ):
+    print('##############################################################')
+    print(f'processing:: {model_name}')
     # load the data
     targets = pd.read_pickle(targets_path)
     predictors = pd.read_pickle(predictors_path)
-    print('##############################################################')
-    print(f'processing:: {model_name}')
+    # prepare model parameters
+    model_params = config.MODEL_PARAMS.get(model_name).copy()
+    model_params.update(
+        config.SHARED_MODEL_PARAMS
+    )
+    model_params.update({
+        'input_shape':(predictors.shape[1],1)
+    })
+    model_params.update(kwargs)
     # define model architecture
     base_model = model_loader.models.get(
         model_name,
         'Invalid model name'
     )(
         model_id='training',
-        **config.MODEL_PARAMS.get(model_name),
-        **config.SHARED_MODEL_PARAMS,
-        input_shape=(predictors.shape[1],1),
+        **model_params
     ).build()
     # clone architecture to reset weights
     model = clone_model(base_model)
     model.compile(
-        loss='mse',
+        loss=model_params.get('loss_func'),
         metrics=[
             RootMeanSquaredError(),
             MeanAbsoluteError()
@@ -51,6 +59,7 @@ def evaluate_model(
         x=predictors.to_numpy()[...,np.newaxis],
         y=targets.loc[:,compound]
     )
+
 
 if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser()
