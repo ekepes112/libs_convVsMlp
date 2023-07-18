@@ -25,14 +25,25 @@ def train_run(
     targets_path: str,
     start_checkpoint_at: float,
     checkpoint_dir: str,
+    callbacks: list,
+    **kwargs
 ):
     """TODO
         make the call more flexible if the function is imported
-        join the morel parameter dictionaries from the config file
-        overwrite the values from kwargs
         make a config loader -> unique experiment id
-        make a dictionary of callbacks and select the callback using cmd arguments -> separate keys at ','
     """
+    # prepare callbacks
+    selected_callbacks = [x.strip() for x in callbacks.split(',')]
+    callbacks = [cv_utils.ReinitializeWeights()]
+    # prepare model parameters
+    model_params = config.MODEL_PARAMS.get(model_name).copy()
+    model_params = model_params.update(
+        config.SHARED_MODEL_PARAMS
+    )
+    model_params = model_params.update({
+        'input_shape':(predictors.shape[1],1)
+    })
+    model_params = model_params.update(kwargs)
     # load the data
     targets = pd.read_pickle(targets_path)
     predictors = pd.read_pickle(predictors_path)
@@ -43,9 +54,7 @@ def train_run(
         'Invalid model name'
     )(
         model_id='training',
-        **config.MODEL_PARAMS.get(model_name),
-        **config.SHARED_MODEL_PARAMS,
-        input_shape=(predictors.shape[1],1),
+        **model_params,
     ).build()
     # split the data names
     train_names = targets.loc[
@@ -63,21 +72,29 @@ def train_run(
     )
 
     # initialize w&b logging
-    wandb_run = wandb.init(
-        project=config.PROJECT_NAME,
-        name=f'{base_model.name}',
-        notes=f'fold_{fold} with weight reinit.'
-    )
-    wandb_run.define_metric(
-        name='val_root_mean_squared_error',
-        summary='min',
-        goal='minimize'
-    )
-    wandb_run.define_metric(
-        name='val_root_mean_squared_error',
-        summary='last',
-        goal='minimize'
-    )
+    if 'wandb' in selected_callbacks:
+        wandb_run = wandb.init(
+            project=config.PROJECT_NAME,
+            name=f'{base_model.name}',
+            notes=f'fold_{fold} with weight reinit.'
+        )
+        wandb_run.define_metric(
+            name='val_root_mean_squared_error',
+            summary='min',
+            goal='minimize'
+        )
+        wandb_run.define_metric(
+            name='val_root_mean_squared_error',
+            summary='last',
+            goal='minimize'
+        )
+
+        callbacks.append(
+            WandbCallback(
+                log_weights=False,
+                save_model=False
+            )
+        )
     # clone architecture to reset weights
     model = clone_model(base_model)
     model.compile(
@@ -89,26 +106,29 @@ def train_run(
         ]
     )
     # create checkpoint directory
-    checkpoint_path = checkpoint_dir.joinpath(
-        f'{model.name}_fold_{fold}/cp_lowest_validation_rmse.ckpt'
-    )
+    if 'checkpointing' in selected_callbacks:
+        checkpoint_path = checkpoint_dir.joinpath(
+            f'{model.name}_fold_{fold}/cp_lowest_validation_rmse.ckpt'
+        )
 
-    if not checkpoint_path.parent.is_dir():
-        print('creating directory')
-        checkpoint_path.parent.mkdir(parents=True)
-    else:
-        print('checkpoint directory already exists')
+        if not checkpoint_path.parent.is_dir():
+            print('creating directory')
+            checkpoint_path.parent.mkdir(parents=True)
+        else:
+            print('checkpoint directory already exists')
 
-    # initialize checkpoint callback
-    callback_checkpointing = ModelCheckpoint(
-        filepath=checkpoint_path,
-        save_weights_only=True,
-        verbose=1,
-        monitor='val_root_mean_squared_error',
-        mode='min',
-        save_best_only=True,
-        initial_value_threshold=start_checkpoint_at
-    )
+        # initialize checkpoint callback
+        callback_checkpointing = ModelCheckpoint(
+            filepath=checkpoint_path,
+            save_weights_only=True,
+            verbose=1,
+            monitor='val_root_mean_squared_error',
+            mode='min',
+            save_best_only=True,
+            initial_value_threshold=start_checkpoint_at
+        )
+
+        callbacks.append(callback_checkpointing)
     # fit the model
     model.fit(
         x=predictors.loc[train_names,:]\
@@ -121,14 +141,7 @@ def train_run(
               .to_numpy()[...,np.newaxis],
             targets.loc[val_names,compound]
         ),
-        callbacks=[
-            callback_checkpointing,
-            WandbCallback(
-                log_weights=False,
-                save_model=False
-            ),
-            cv_utils.ReinitializeWeights()
-        ]
+        callbacks=callbacks
     )
 
     model_path = checkpoint_dir.parent.joinpath('models')\
@@ -167,6 +180,10 @@ if __name__ == '__main__':
         '--predictors',
         type=str,
     )
+    argument_parser.add_argument(
+        '--callbacks',
+        type=str,
+    )
     cmd_args = argument_parser.parse_args()
 
     train_run(
@@ -177,4 +194,5 @@ if __name__ == '__main__':
         targets_path=cmd_args.targets,
         start_checkpoint_at=6.,
         checkpoint_dir=Path(config.CHECKPOINT_DIR),
+        callbacks=cmd_args.callbacks,
     )
