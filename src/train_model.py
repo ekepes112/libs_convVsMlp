@@ -37,13 +37,13 @@ def train_run(
     callbacks = [cv_utils.ReinitializeWeights()]
     # prepare model parameters
     model_params = config.MODEL_PARAMS.get(model_name).copy()
-    model_params = model_params.update(
+    model_params.update(
         config.SHARED_MODEL_PARAMS
     )
-    model_params = model_params.update({
+    model_params.update({
         'input_shape':(predictors.shape[1],1)
     })
-    model_params = model_params.update(kwargs)
+    model_params.update(kwargs)
     # load the data
     targets = pd.read_pickle(targets_path)
     predictors = pd.read_pickle(predictors_path)
