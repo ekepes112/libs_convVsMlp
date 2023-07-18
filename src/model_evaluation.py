@@ -30,6 +30,7 @@ def evaluate_model(
         model_id='training',
         **config.MODEL_PARAMS.get(model_name),
         **config.SHARED_MODEL_PARAMS,
+        input_shape=(predictors.shape[1],1),
     ).build()
     # clone architecture to reset weights
     model = clone_model(base_model)
