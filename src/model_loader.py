@@ -4,6 +4,7 @@ from model_def_vgg import VGG1D
 from model_def_resnet_bn import ResNetBatchNorm1D
 from model_def_resnet_bottleneck import ResNetBottleneck1D
 from model_def_resnet_simple import ResNetSimple1D
+from model_def_mlp_equivalent import MLP
 
 models = {
     'alexnet': AlexNet1D,
@@ -12,4 +13,5 @@ models = {
     'resnet_bn': ResNetBatchNorm1D,
     'resnet_simple': ResNetSimple1D,
     'densenet': DenseNet1D,
+    'mlp': MLP
 }
