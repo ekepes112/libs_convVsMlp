@@ -14,6 +14,7 @@ MODEL_PARAMS = {
     'resnet_bn': {},
     'resnet_simple': {},
     'densenet': {},
+    'mlp': {},
 }
 SHARED_MODEL_PARAMS = {
     'prediction_head_params':{
@@ -31,6 +32,7 @@ INITIAL_LEARNING_RATES = {
     'resnet_bn': 2e-5,
     'resnet_simple': 1e-5,
     'densenet': 3.5e-6,
+    'mlp': 3e-4,
 }
 OPTIMIZERS = {
     'alexnet': 'Adam_8',
@@ -39,6 +41,7 @@ OPTIMIZERS = {
     'resnet_bn': 'Adam_1',
     'resnet_simple': 'Adam_1',
     'densenet': 'Adam_5',
+    'mlp': 'Adam_1',
 }
 
 TRAIN_EPOCHS = 500
