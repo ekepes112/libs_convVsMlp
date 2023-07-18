@@ -35,6 +35,9 @@ def train_run(
     # prepare callbacks
     selected_callbacks = [x.strip() for x in callbacks.split(',')]
     callbacks = [cv_utils.ReinitializeWeights()]
+    # load the data
+    targets = pd.read_pickle(targets_path)
+    predictors = pd.read_pickle(predictors_path)
     # prepare model parameters
     model_params = config.MODEL_PARAMS.get(model_name).copy()
     model_params.update(
@@ -44,9 +47,6 @@ def train_run(
         'input_shape':(predictors.shape[1],1)
     })
     model_params.update(kwargs)
-    # load the data
-    targets = pd.read_pickle(targets_path)
-    predictors = pd.read_pickle(predictors_path)
     # define model architecture
     print(f'processing:: {model_name} - {fold}')
     base_model = model_loader.models.get(
