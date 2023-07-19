@@ -76,7 +76,6 @@ def cv_run(
             cmd_args.model,
             'Invalid model name'
         )(
-            model_id='optimizer_cv',
             **model_params,
         ).build(),
         tried_optimizers=cv_utils.generate_optimizers(),
