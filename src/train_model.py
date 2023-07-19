@@ -1,4 +1,5 @@
 import argparse
+import ast
 import numpy as np
 import pandas as pd
 
@@ -44,7 +45,7 @@ def train_run(
         config.SHARED_MODEL_PARAMS
     )
     model_params.update({
-        'input_shape':(predictors.shape[1],1)
+        'input_shape': (predictors.shape[1], 1)
     })
     model_params.update(kwargs)
     # define model architecture
@@ -58,10 +59,10 @@ def train_run(
     ).build()
     # split the data names
     train_names = targets.loc[
-        targets.loc[:,f'{compound}_Folds'] != fold,:
+        targets.loc[:, f'{compound}_Folds'] != fold, :
     ].index
     val_names = targets.loc[
-        targets.loc[:,f'{compound}_Folds'] == fold,:
+        targets.loc[:, f'{compound}_Folds'] == fold, :
     ].index
     # get optimal optimizer
     optimizer = cv_utils.generate_optimizers()[
@@ -131,21 +132,21 @@ def train_run(
         callbacks.append(callback_checkpointing)
     # fit the model
     model.fit(
-        x=predictors.loc[train_names,:]\
-          .to_numpy()[...,np.newaxis],
-        y=targets.loc[train_names,compound],
+        x=predictors.loc[train_names, :]
+        .to_numpy()[..., np.newaxis],
+        y=targets.loc[train_names, compound],
         batch_size=config.BATCH_SIZE,
         epochs=config.TRAIN_EPOCHS,
         validation_data=(
-            predictors.loc[val_names,:]\
-              .to_numpy()[...,np.newaxis],
-            targets.loc[val_names,compound]
+            predictors.loc[val_names, :]
+            .to_numpy()[..., np.newaxis],
+            targets.loc[val_names, compound]
         ),
         callbacks=callbacks
     )
 
     model_path = checkpoint_dir.parent.joinpath('models')\
-      .joinpath(f'{model.name}_fold_{fold}_fin')
+        .joinpath(f'{model.name}_fold_{fold}_fin')
     model.save(filepath=model_path)
     shutil.move(
         checkpoint_path.parent,
@@ -184,6 +185,11 @@ if __name__ == '__main__':
         '--callbacks',
         type=str,
     )
+    argument_parser.add_argument(
+        '--kwargs',
+        type=str,
+    )
+
     cmd_args = argument_parser.parse_args()
 
     train_run(
@@ -195,4 +201,5 @@ if __name__ == '__main__':
         start_checkpoint_at=6.,
         checkpoint_dir=Path(config.CHECKPOINT_DIR),
         callbacks=cmd_args.callbacks,
+        **ast.literal_eval(cmd_args.kwargs)
     )
