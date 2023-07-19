@@ -42,7 +42,7 @@ def cv_run(
         config.SHARED_MODEL_PARAMS
     )
     model_params.update({
-        'input_shape': (predictors.shape[1], 1)
+        'input_shape': (predictors.shape[1], 1),
         'model_id': 'optimizer_cv_',
     })
     model_params.update(kwargs)
