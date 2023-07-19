@@ -9,14 +9,12 @@ from ann_modules import prediction_head
 class ResNetSimple1D():
     def __init__(
         self,
-        l1_dense: float = 0.,
-        l2_dense: float = 0.,
         input_shape: tuple = (None,),
         optimizer: opt.Optimizer = None,
         loss_func: str = None,
         eval_metrics: list = [],
         model_id: str = 'prototype',
-        prediction_sizes: list = [2048, 1024],
+        prediction_head_params: dict = {},
     ):
         if loss_func is None:
             raise ValueError('No loss function specified')
@@ -25,13 +23,11 @@ class ResNetSimple1D():
             self.optimizer = opt.Adam(learning_rate=3e-4)
         else:
             self.optimizer = optimizer
-        self.l1_dense = l1_dense
-        self.l2_dense = l2_dense
         self.input_shape = input_shape
         self.loss_func = loss_func
         self.eval_metrics = eval_metrics
         self.model_id = model_id
-        self.prediction_sizes = prediction_sizes
+        self.prediction_head_params = prediction_head_params
         self.model_id = f'resnet_simple_{model_id}'
 
     def build(self):
@@ -61,9 +57,7 @@ class ResNetSimple1D():
 
         output = prediction_head(
             x,
-            layer_sizes=self.prediction_sizes,
-            lambda_l1=self.l1_dense,
-            lambda_l2=self.l2_dense,
+            **self.prediction_head_params
         )
 
         model = Model(
