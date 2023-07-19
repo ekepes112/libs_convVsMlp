@@ -43,6 +43,7 @@ def cv_run(
     )
     model_params.update({
         'input_shape': (predictors.shape[1], 1)
+        'model_id': 'optimizer_cv_',
     })
     model_params.update(kwargs)
     # define model architecture
@@ -50,7 +51,6 @@ def cv_run(
         model_name,
         'Invalid model name'
     )(
-        model_id='optimizer_cv_',
         **model_params,
     ).build()
     # take the core model name
