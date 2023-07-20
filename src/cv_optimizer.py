@@ -183,7 +183,7 @@ if __name__ == '__main__':
     )
     argument_parser.add_argument(
         '--folds',
-        type=int,
+        type=str,
     )
     argument_parser.add_argument(
         '--targets',
