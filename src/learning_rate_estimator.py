@@ -64,7 +64,8 @@ def estimate_learnig_rate(
         else:
             return (lr * exp(step_size))
 
-    for optimizer_name in tried_optimizers:
+    tried_optimizer_names = list(tried_optimizers.keys())
+    for optimizer_name in tried_optimizer_names:
         save_path = results_path.joinpath(optimizer_name)
         if save_path.exists() and not overwrite_existing:
             print(f'Loading in training history for {optimizer_name}')
