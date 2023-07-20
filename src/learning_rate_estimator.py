@@ -146,4 +146,5 @@ def estimate_learnig_rate(
         if return_data:
             return (plot_data)
 
+        del model
         clear_session()
