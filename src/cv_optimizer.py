@@ -77,8 +77,7 @@ def cv_run(
                 **model_params,
             ).build(),
             optimizer=optimizer_dispatcher.generate_optimizer(
-                optimizer_name,
-                config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name),
+                **config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name)
             ),
             **lr_scan_params
         )
@@ -96,8 +95,7 @@ def cv_run(
         print(f'{optimizer_name}:: {lr_estimate:.4f}')
         # take the current optimizer
         optimizer = optimizer_dispatcher.generate_optimizer(
-            optimizer_name,
-            config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name),
+            **config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name)
         )
         if not optimizer:
             continue
