@@ -148,5 +148,6 @@ def estimate_learnig_rate(
             return (plot_data)
 
         del model
+        del tried_optimizers[optimizer_name]
         clear_session()
         gc.collect()
