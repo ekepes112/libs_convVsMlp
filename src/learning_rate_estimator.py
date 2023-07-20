@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from pathlib import Path
-from keras.engine import functional
 from keras import models, optimizers
-from tensorflow.math import exp
+from keras.engine import functional
 from keras.callbacks import LearningRateScheduler
+from tensorflow.math import exp
+from tensorflow.keras.backend import clear_session
 from IPython.display import HTML, display
 from graph_utils import _update_layout
 
@@ -144,3 +145,5 @@ def estimate_learnig_rate(
 
         if return_data:
             return (plot_data)
+
+        clear_session()
