@@ -1,6 +1,6 @@
 from tensorflow.keras.optimizers import Adam, SGD
 
-def generate_optimizers(
+def generate_optimizer(
     optimizer_type,
     **kwargs
 ):
