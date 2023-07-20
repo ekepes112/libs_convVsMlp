@@ -53,8 +53,6 @@ def cv_run(
     )(
         **model_params,
     ).build()
-    # take the core model name
-    base_model_name = base_model.name.split('_')[0]
     print(f'processing fold {fold}')
     # regenerate optimizers to reset their states
     explored_optimizers = cv_utils.generate_optimizers()
@@ -82,9 +80,10 @@ def cv_run(
         **lr_scan_params
     )
     # loop over each explored optimizer
-    for file_path in Path(config_cv_optimizers.RESULTS_PATH)\
+    lr_estimates_dir = Path(lr_scan_params['results_path'])\
         .joinpath('lr_estimates')\
-            .glob(f'{base_model_name}*.txt'):
+        .joinpath(base_model.name)
+    for file_path in lr_estimates_dir.glob('*.txt'):
         with open(file_path, 'r') as file:
             lr_estimate = float(file.read())
         optimizer_name = '_'.join(

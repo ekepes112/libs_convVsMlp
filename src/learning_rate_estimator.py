@@ -9,6 +9,8 @@ from keras.callbacks import LearningRateScheduler
 from IPython.display import HTML, display
 from graph_utils import _update_layout
 
+import config
+
 
 def guess_learning_rate(fit_history: pd.DataFrame) -> float:
     tresholded_losses = fit_history.loc[
@@ -50,8 +52,9 @@ def estimate_learnig_rate(
     save_fig: bool = True
 ):
 
-    if not results_path.joinpath('lr_estimates').is_dir():
-        results_path.joinpath('lr_estimates').mkdir()
+    results_path = results_path.joinpath(f'lr_estimates/{base_model.name}')
+    if not results_path.is_dir():
+        results_path.mkdir(parents=True)
 
     def scheduler(epoch, lr):
         if epoch < warmup_count:
@@ -60,12 +63,10 @@ def estimate_learnig_rate(
             return (lr * exp(step_size))
 
     for optimizer_name in tried_optimizers:
-        save_path = results_path.joinpath(
-            f'lr_estimates/{base_model.name}_{optimizer_name}.html'
-        )
+        save_path = results_path.joinpath(optimizer_name)
         if save_path.exists() and not overwrite_existing:
             print(f'Loading in training history for {optimizer_name}')
-            display(HTML(filename=save_path))
+            display(HTML(filename=save_path.with_suffix('.html')))
             return (None)
 
         print(f'Estimating {optimizer_name}')
@@ -82,7 +83,7 @@ def estimate_learnig_rate(
 
         model.compile(
             optimizer=tried_optimizers.get(optimizer_name),
-            loss='mse'
+            loss=config.SHARED_MODEL_PARAMS['loss_func']
         )
 
         training_history = model.fit(
@@ -131,7 +132,7 @@ def estimate_learnig_rate(
         )
         fig.show()
         if save_fig:
-            fig.write_html(save_path)
+            fig.write_html(save_path.with_suffix('.html'))
 
         try:
             lr_guess = guess_learning_rate(plot_data)
