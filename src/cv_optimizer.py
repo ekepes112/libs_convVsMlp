@@ -203,7 +203,7 @@ if __name__ == '__main__':
     )
     cmd_args = argument_parser.parse_args()
 
-    for fold in cmd_args.fold.split(','):
+    for fold in cmd_args.folds.split(','):
         cv_run(
             model_name=cmd_args.model,
             fold=fold,
