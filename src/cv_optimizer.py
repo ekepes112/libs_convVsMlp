@@ -213,7 +213,7 @@ if __name__ == '__main__':
             lr_scan_params={
                 'batch_size': config.BATCH_SIZE,
                 'results_path': Path(config_cv_optimizers.RESULTS_PATH),
-                'loss_function':config.SHARED_MODEL_PARAMS['loss_func']
+                'loss_function':config.SHARED_MODEL_PARAMS['loss_func'],
                 'end_lr': config_cv_optimizers.LR_SCAN_END,
                 'step_size': config_cv_optimizers.LR_SCAN_STEP_SIZE,
                 'warmup_count': config_cv_optimizers.LR_SCAN_WARMUP,
