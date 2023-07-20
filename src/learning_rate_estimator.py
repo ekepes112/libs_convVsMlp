@@ -55,14 +55,13 @@ def estimate_learnig_rate(
     save_fig: bool = True,
 ):
     # prepare saving the results
-    optimizer_name = optimizer.name
-    print(f'Estimating {optimizer_name}')
+    print(f'Estimating {optimizer.name}')
     results_path = results_path.joinpath(f'lr_estimates/{base_model.name}')
     if not results_path.is_dir():
         results_path.mkdir(parents=True)
-    save_path = results_path.joinpath(optimizer_name)
+    save_path = results_path.joinpath(optimizer.name)
     if save_path.exists() and not overwrite_existing:
-        print(f'Loading in training history for {optimizer_name}')
+        print(f'Loading in training history for {optimizer.name}')
         display(HTML(filename=save_path.with_suffix('.html')))
         return (None)
     # prepare the lr scheduler
@@ -118,7 +117,7 @@ def estimate_learnig_rate(
     fig.update_xaxes(type="log")
     fig.update_yaxes(type="log")
     fig.update_layout(
-        title=f'Model: {model.name}; Optimizer: {optimizer_name}',
+        title=f'Model: {model.name}; Optimizer: {optimizer.name}',
         font=dict(
             family="Courier New, monospace",
             size=18
