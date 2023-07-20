@@ -212,7 +212,7 @@ if __name__ == '__main__':
     for fold in cmd_args.folds.split(','):
         cv_run(
             model_name=cmd_args.model,
-            fold=fold,
+            fold=int(fold),
             compound=cmd_args.compound,
             predictors_path=cmd_args.predictors,
             targets_path=cmd_args.targets,
