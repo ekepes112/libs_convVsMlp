@@ -68,16 +68,20 @@ def cv_run(
         targets.loc[train_names, compound],
     )
     # estimate the initial learning rate
-    learning_rate_estimator.estimate_learnig_rate(
-        base_model=model_loader.models.get(
-            cmd_args.model,
-            'Invalid model name'
-        )(
-            **model_params,
-        ).build(),
-        tried_optimizers=cv_utils.generate_optimizers(),
-        **lr_scan_params
-    )
+    for optimizer_name in config_cv_optimizers.OPTIMIZERS:
+        learning_rate_estimator.estimate_learnig_rate(
+            base_model=model_loader.models.get(
+                cmd_args.model,
+                'Invalid model name'
+            )(
+                **model_params,
+            ).build(),
+            optimizer=optimizer_dispatcher.generate_optimizer(
+                optimizer_name,
+                config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name),
+            ),
+            **lr_scan_params
+        )
     # loop over each explored optimizer
     lr_estimates_dir = Path(lr_scan_params['results_path'])\
         .joinpath('lr_estimates')\
@@ -91,7 +95,10 @@ def cv_run(
         ).replace('.txt', '')
         print(f'{optimizer_name}:: {lr_estimate:.4f}')
         # take the current optimizer
-        optimizer = cv_utils.generate_optimizers().get(optimizer_name)
+        optimizer = optimizer_dispatcher.generate_optimizer(
+            optimizer_name,
+            config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name),
+        )
         if not optimizer:
             continue
         optimizer.learning_rate = Variable(lr_estimate)
