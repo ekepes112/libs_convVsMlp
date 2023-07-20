@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+import gc
 from pathlib import Path
 from keras import models, optimizers
 from keras.engine import functional
@@ -148,3 +149,4 @@ def estimate_learnig_rate(
 
         del model
         clear_session()
+        gc.collect()
