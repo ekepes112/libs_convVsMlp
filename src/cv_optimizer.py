@@ -16,6 +16,7 @@ import config
 import cv_utils
 import config_cv_optimizers
 import learning_rate_estimator
+import optimizer_dispatcher
 
 
 def cv_run(
@@ -34,8 +35,8 @@ def cv_run(
     selected_callbacks = [x.strip() for x in callbacks.split(',')]
     callbacks = [cv_utils.ReinitializeWeights()]
     # load the data
-    targets = pd.read_pickle(targets_path)
     predictors = pd.read_pickle(predictors_path)
+    targets = pd.read_pickle(targets_path)
     # prepare model parameters
     model_params = config.MODEL_PARAMS.get(model_name).copy()
     model_params.update(
@@ -47,15 +48,13 @@ def cv_run(
     })
     model_params.update(kwargs)
     # define model architecture
-    base_model = model_loader.models.get(
-        model_name,
-        'Invalid model name'
-    )(
-        **model_params,
-    ).build()
+    # base_model = model_loader.models.get(
+    #     model_name,
+    #     'Invalid model name'
+    # )(
+    #     **model_params,
+    # ).build()
     print(f'processing fold {fold}')
-    # regenerate optimizers to reset their states
-    explored_optimizers = cv_utils.generate_optimizers()
     # split the data names
     train_names = targets.loc[
         targets.loc[:, f'{compound}_Folds'] != fold, :
@@ -82,7 +81,8 @@ def cv_run(
     # loop over each explored optimizer
     lr_estimates_dir = Path(lr_scan_params['results_path'])\
         .joinpath('lr_estimates')\
-        .joinpath(base_model.name)
+        .joinpath(f"model_name_{model_params['model_id']}")
+        # .joinpath(base_model.name)
     for file_path in lr_estimates_dir.glob('*.txt'):
         with open(file_path, 'r') as file:
             lr_estimate = float(file.read())
@@ -91,7 +91,7 @@ def cv_run(
         ).replace('.txt', '')
         print(f'{optimizer_name}:: {lr_estimate:.4f}')
         # take the current optimizer
-        optimizer = explored_optimizers.get(optimizer_name)
+        optimizer = cv_utils.generate_optimizers().get(optimizer_name)
         if not optimizer:
             continue
         optimizer.learning_rate = Variable(lr_estimate)
@@ -99,7 +99,7 @@ def cv_run(
         if 'wandb' in selected_callbacks:
             wandb_run = wandb.init(
                 project=config.PROJECT_NAME,
-                name=f'{base_model.name}{optimizer_name}',
+                name=f"{model_name}{model_params['model_id']}{optimizer_name}",
                 notes=f'fold_{fold}; {lr_estimate:.2e}, with weight reinit.'
             )
             wandb_run.define_metric(
@@ -120,7 +120,12 @@ def cv_run(
                 )
             )
         # clone architecture to reset weights
-        model = clone_model(base_model)
+        model = model_loader.models.get(
+            model_name,
+            'Invalid model name'
+        )(
+            **model_params,
+        ).build()
         model.compile(
             optimizer=optimizer,
             loss=model_params.get('loss_func'),
@@ -177,7 +182,7 @@ if __name__ == '__main__':
         type=str,
     )
     argument_parser.add_argument(
-        '--fold',
+        '--folds',
         type=int,
     )
     argument_parser.add_argument(
@@ -198,24 +203,28 @@ if __name__ == '__main__':
     )
     cmd_args = argument_parser.parse_args()
 
-    cv_run(
-        model_name=cmd_args.model,
-        compound=cmd_args.compound,
-        fold=cmd_args.fold,
-        predictors_path=cmd_args.predictors,
-        targets_path=cmd_args.targets,
-        lr_scan_params={
-            'results_path': Path(config_cv_optimizers.RESULTS_PATH),
-            'end_lr': config_cv_optimizers.LR_SCAN_END,
-            'step_size': config_cv_optimizers.LR_SCAN_STEP_SIZE,
-            'warmup_count': config_cv_optimizers.LR_SCAN_WARMUP,
-            'batch_size': config.BATCH_SIZE,
-            'overwrite_existing': True,
-            'return_data': False,
-            'save_fig': False
-        },
-        start_checkpoint_at=5.,
-        checkpoint_dir=Path(config.CHECKPOINT_DIR),
-        callbacks=cmd_args.callbacks,
-        **ast.literal_eval(cmd_args.kwargs),
-    )
+    for fold in cmd_args.fold.split(','):
+        cv_run(
+            model_name=cmd_args.model,
+            fold=fold,
+            compound=cmd_args.compound,
+            predictors_path=cmd_args.predictors,
+            targets_path=cmd_args.targets,
+            lr_scan_params={
+                'batch_size': config.BATCH_SIZE,
+                'results_path': Path(config_cv_optimizers.RESULTS_PATH),
+                'loss_function':config.SHARED_MODEL_PARAMS['loss_func']
+                'end_lr': config_cv_optimizers.LR_SCAN_END,
+                'step_size': config_cv_optimizers.LR_SCAN_STEP_SIZE,
+                'warmup_count': config_cv_optimizers.LR_SCAN_WARMUP,
+                'clone_model': True,
+                'overwrite_existing': True,
+                'return_data': False,
+                'training_verbosity': 0,
+                'save_fig': False,
+            },
+            callbacks=cmd_args.callbacks,
+            checkpoint_dir=Path(config.CHECKPOINT_DIR),
+            start_checkpoint_at=5.,
+            **ast.literal_eval(cmd_args.kwargs),
+        )
