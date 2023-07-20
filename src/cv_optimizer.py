@@ -68,27 +68,28 @@ def cv_run(
         targets.loc[train_names, compound],
     )
     # estimate the initial learning rate
-    for optimizer_name in config_cv_optimizers.OPTIMIZERS:
-        learning_rate_estimator.estimate_learnig_rate(
-            base_model=model_loader.models.get(
-                cmd_args.model,
-                'Invalid model name'
-            )(
-                **model_params,
-            ).build(),
-            optimizer=optimizer_dispatcher.generate_optimizer(
-                **config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name)
-            ),
-            **lr_scan_params
-        )
+    # for optimizer_name in config_cv_optimizers.OPTIMIZERS:
+    #     learning_rate_estimator.estimate_learnig_rate(
+    #         base_model=model_loader.models.get(
+    #             cmd_args.model,
+    #             'Invalid model name'
+    #         )(
+    #             **model_params,
+    #         ).build(),
+    #         optimizer=optimizer_dispatcher.generate_optimizer(
+    #             **config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name)
+    #         ),
+    #         **lr_scan_params
+    #     )
     # loop over each explored optimizer
     lr_estimates_dir = Path(lr_scan_params['results_path'])\
         .joinpath('lr_estimates')\
-        .joinpath(f"model_name_{model_params['model_id']}")
+        .joinpath(f"{model_name}_{model_params['model_id']}")
         # .joinpath(base_model.name)
+    print(lr_estimates_dir)
     for file_path in lr_estimates_dir.glob('*.txt'):
         with open(file_path, 'r') as file:
-            lr_estimate = float(file.read())
+            lr_estimate = float(file.read())s
         optimizer_name = '_'.join(
             file_path.name.split('_')[-2:]
         ).replace('.txt', '')
