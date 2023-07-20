@@ -69,7 +69,7 @@ def cv_run(
     )
     # estimate the initial learning rate
     # for optimizer_name in config_cv_optimizers.OPTIMIZERS:
-    #     learning_rate_estimator.estimate_learnig_rate(
+    #     learning_rate_estimator.estimate_learnig`_rate(
     #         base_model=model_loader.models.get(
     #             cmd_args.model,
     #             'Invalid model name'
@@ -89,7 +89,7 @@ def cv_run(
     print(lr_estimates_dir)
     for file_path in lr_estimates_dir.glob('*.txt'):
         with open(file_path, 'r') as file:
-            lr_estimate = float(file.read())s
+            lr_estimate = float(file.read())
         optimizer_name = '_'.join(
             file_path.name.split('_')[-2:]
         ).replace('.txt', '')
