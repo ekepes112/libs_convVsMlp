@@ -32,7 +32,10 @@ INITIAL_LEARNING_RATES = {
     'resnet_bn': 2e-5,
     'resnet_simple': 1e-5,
     'densenet': 3.5e-6,
-    'mlp': 3e-4,
+    'mlp_13100': 4.5e-5,
+    'mlp_6500': 5.5e-5,
+    'mlp_3200': 6.6e-5,
+    'mlp_1600': 8.1e-5,
 }
 OPTIMIZERS = {
     'alexnet': 'Adam_8',
@@ -42,6 +45,10 @@ OPTIMIZERS = {
     'resnet_simple': 'Adam_1',
     'densenet': 'Adam_5',
     'mlp': 'Adam_1',
+    'mlp_13100': 'Adam_4',
+    'mlp_6500': 'Adam_9',
+    'mlp_3200': 'Adam_5',
+    'mlp_1600': 'Adam_5',
 }
 
 TRAIN_EPOCHS = 500
