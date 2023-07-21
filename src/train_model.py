@@ -10,6 +10,7 @@ from tensorflow import Variable
 from tensorflow.keras.models import clone_model
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.backend import clear_session
 import wandb
 from wandb.keras import WandbCallback
 
@@ -157,6 +158,12 @@ def train_run(
             )
         )
     )
+
+    # clean up
+    del model
+    del optimizer
+    clear_session()
+    gc.collect()
 
 
 if __name__ == '__main__':
