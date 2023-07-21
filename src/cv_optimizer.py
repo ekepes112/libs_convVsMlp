@@ -2,12 +2,14 @@ import argparse
 import ast
 import numpy as np
 import pandas as pd
+import gc
 
 from pathlib import Path
 from tensorflow import Variable
 from tensorflow.keras.models import clone_model
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.backend import clear_session
 import wandb
 from wandb.keras import WandbCallback
 
@@ -47,13 +49,6 @@ def cv_run(
         'model_id': 'optimizer_cv_',
     })
     model_params.update(kwargs)
-    # define model architecture
-    # base_model = model_loader.models.get(
-    #     model_name,
-    #     'Invalid model name'
-    # )(
-    #     **model_params,
-    # ).build()
     print(f'processing fold {fold}')
     # split the data names
     train_names = targets.loc[
@@ -85,8 +80,6 @@ def cv_run(
     lr_estimates_dir = Path(lr_scan_params['results_path'])\
         .joinpath('lr_estimates')\
         .joinpath(f"{model_name}_{model_params['model_id']}")
-        # .joinpath(base_model.name)
-    print(lr_estimates_dir)
     for file_path in lr_estimates_dir.glob('*.txt'):
         with open(file_path, 'r') as file:
             lr_estimate = float(file.read())
@@ -175,6 +168,12 @@ def cv_run(
             ),
             callbacks=callbacks
         )
+
+        # clean up
+        del model
+        del optimizer
+        clear_session()
+        gc.collect()
 
 
 if __name__ == '__main__':
