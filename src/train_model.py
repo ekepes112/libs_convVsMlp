@@ -31,7 +31,6 @@ def train_run(
     **kwargs
 ):
     """TODO
-        make the call more flexible if the function is imported
         make a config loader -> unique experiment id
     """
     # prepare callbacks
@@ -46,7 +45,8 @@ def train_run(
         config.SHARED_MODEL_PARAMS
     )
     model_params.update({
-        'input_shape': (predictors.shape[1], 1)
+        'input_shape': (predictors.shape[1], 1),
+        'model_id': 'training',
     })
     model_params.update(kwargs)
     # define model architecture
@@ -55,7 +55,6 @@ def train_run(
         model_name,
         'Invalid model name'
     )(
-        model_id='training',
         **model_params,
     ).build()
     # split the data names
@@ -67,12 +66,11 @@ def train_run(
     ].index
     # get optimal optimizer
     optimizer = cv_utils.generate_optimizers()[
-        config.OPTIMIZERS.get(model_name)
+        config.OPTIMIZERS.get(base_model.name)
     ]
     optimizer.learning_rate = Variable(
-        config.INITIAL_LEARNING_RATES.get(model_name)
+        config.INITIAL_LEARNING_RATES.get(base_model.name)
     )
-
     # initialize w&b logging
     if 'wandb' in selected_callbacks:
         wandb_run = wandb.init(
