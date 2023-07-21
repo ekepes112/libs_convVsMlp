@@ -69,7 +69,7 @@ def train_run(
     ].index
     # get optimal optimizer
     optimizer = optimizer_dispatcher.generate_optimizer(
-        config_cv_optimizers.OPTIMIZER_PARAMS[
+        **config_cv_optimizers.OPTIMIZER_PARAMS[
             config.OPTIMIZERS.get(base_model.name)
         ]
     )
