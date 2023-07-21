@@ -18,6 +18,7 @@ from wandb.keras import WandbCallback
 import model_loader
 import config
 import cv_utils
+import config_cv_optimizers
 import optimizer_dispatcher
 
 
@@ -67,9 +68,11 @@ def train_run(
         targets.loc[:, f'{compound}_Folds'] == fold, :
     ].index
     # get optimal optimizer
-    optimizer = optimizer_dispatcher.generate_optimizer()[
-        config.OPTIMIZERS.get(base_model.name)
-    ]
+    optimizer = optimizer_dispatcher.generate_optimizer(
+        config_cv_optimizers.OPTIMIZER_PARAMS[
+            config.OPTIMIZERS.get(base_model.name)
+        ]
+    )
     optimizer.learning_rate = Variable(
         config.INITIAL_LEARNING_RATES.get(base_model.name)
     )
