@@ -2,6 +2,7 @@ import argparse
 import ast
 import numpy as np
 import pandas as pd
+import gc
 
 from pathlib import Path
 import shutil
@@ -110,13 +111,11 @@ def train_run(
         checkpoint_path = checkpoint_dir.joinpath(
             f'{model.name}_fold_{fold}/cp_lowest_validation_rmse.ckpt'
         )
-
         if not checkpoint_path.parent.is_dir():
             print('creating directory')
             checkpoint_path.parent.mkdir(parents=True)
         else:
             print('checkpoint directory already exists')
-
         # initialize checkpoint callback
         callback_checkpointing = ModelCheckpoint(
             filepath=checkpoint_path,
@@ -127,7 +126,6 @@ def train_run(
             save_best_only=True,
             initial_value_threshold=start_checkpoint_at
         )
-
         callbacks.append(callback_checkpointing)
     # fit the model
     model.fit(
@@ -199,8 +197,8 @@ if __name__ == '__main__':
 
     train_run(
         model_name=cmd_args.model,
-        compound=cmd_args.compound,
         fold=cmd_args.fold,
+        compound=cmd_args.compound,
         predictors_path=cmd_args.predictors,
         targets_path=cmd_args.targets,
         start_checkpoint_at=6.,
