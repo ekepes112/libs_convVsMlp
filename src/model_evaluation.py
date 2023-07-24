@@ -84,6 +84,7 @@ if __name__ == '__main__':
     argument_parser.add_argument(
         '--kwargs',
         type=str,
+        default='',
     )
     cmd_args = argument_parser.parse_args()
 
