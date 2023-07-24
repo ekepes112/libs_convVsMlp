@@ -1,4 +1,5 @@
 import argparse
+import ast
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -83,6 +84,10 @@ if __name__ == '__main__':
         '--weights',
         type=str,
     )
+    argument_parser.add_argument(
+        '--kwargs',
+        type=str,
+    )
     cmd_args = argument_parser.parse_args()
 
     evaluate_model(
@@ -91,4 +96,5 @@ if __name__ == '__main__':
         weights_path=cmd_args.weights,
         predictors_path=cmd_args.predictors,
         targets_path=cmd_args.targets,
+        **ast.literal_eval(cmd_args.kwargs)
     )
