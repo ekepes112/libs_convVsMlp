@@ -87,9 +87,6 @@ if __name__ == '__main__':
     )
     cmd_args = argument_parser.parse_args()
 
-    print(cmd_args.model)
-    print(cmd_args.kwargs)
-
     evaluate_model(
         model_name=cmd_args.model,
         compound=cmd_args.compound,
