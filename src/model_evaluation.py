@@ -49,9 +49,7 @@ def evaluate_model(
             MeanAbsoluteError()
         ]
     )
-
-    weights_path = Path(config.RESULTS_PATH).parent.joinpath('models')\
-      .joinpath(weights_path)
+    # get weights of selected trained model
     model.load_weights(weights_path)
 
     print(f'performance on {predictors_path}')
