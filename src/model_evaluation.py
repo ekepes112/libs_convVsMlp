@@ -30,6 +30,16 @@ def evaluate_model(
         config.SHARED_MODEL_PARAMS
     )
     model_params.update({
+        'input_shape': (predictors.shape[1], 1),
+        'model_id': 'training',
+    })
+    model_params.update(kwargs)
+    # prepare model parameters
+    model_params = config.MODEL_PARAMS.get(model_name).copy()
+    model_params.update(
+        config.SHARED_MODEL_PARAMS
+    )
+    model_params.update({
         'input_shape':(predictors.shape[1],1)
     })
     model_params.update(kwargs)
