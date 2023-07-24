@@ -34,14 +34,13 @@ def evaluate_model(
     })
     model_params.update(kwargs)
     # define model architecture
-    base_model = model_loader.models.get(
+    model = model_loader.models.get(
         model_name,
         'Invalid model name'
     )(
         **model_params
     ).build()
     # clone architecture to reset weights
-    model = clone_model(base_model)
     model.compile(
         loss=model_params.get('loss_func'),
         metrics=[
@@ -84,9 +83,12 @@ if __name__ == '__main__':
     argument_parser.add_argument(
         '--kwargs',
         type=str,
-        default='',
+        default='{}',
     )
     cmd_args = argument_parser.parse_args()
+
+    print(cmd_args.model)
+    print(cmd_args.kwargs)
 
     evaluate_model(
         model_name=cmd_args.model,
