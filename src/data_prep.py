@@ -152,12 +152,14 @@ if __name__ == '__main__':
         ].astype(np.int8)
 
     targets = targets.loc[data.index]
-    targets = targets.loc[
-        (targets.loc[:,f'{cmd_args.compound}_Folds'] > 0) & \
-          (targets.loc[:,'distance_mm'] < 4000) & \
-          np.invert(np.isnan(targets.loc[:,cmd_args.compound])),
-        :
-    ]
+
+    if 'distance_mm' in list(targets.columns):
+        targets = targets.loc[
+            (targets.loc[:,f'{cmd_args.compound}_Folds'] > 0) & \
+            (targets.loc[:,'distance_mm'] < 4000) & \
+            np.invert(np.isnan(targets.loc[:,cmd_args.compound])),
+            :
+        ]
     test_names = targets.loc[
         targets.loc[:,f'{cmd_args.compound}_Folds'] == config.TEST_FOLD,:
     ].index
