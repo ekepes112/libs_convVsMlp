@@ -64,6 +64,7 @@ def cv_run(
     )
     # estimate the initial learning rate
     for optimizer_name in config_cv_optimizers.OPTIMIZERS:
+        print(f'Estimating {optimizer_name}')
         learning_rate_estimator.estimate_learnig_rate(
             base_model=model_loader.models.get(
                 cmd_args.model,
@@ -74,6 +75,7 @@ def cv_run(
             optimizer=optimizer_dispatcher.generate_optimizer(
                 **config_cv_optimizers.OPTIMIZER_PARAMS.get(optimizer_name)
             ),
+            optimizer_name=optimizer_name,
             **lr_scan_params
         )
     # loop over each explored optimizer

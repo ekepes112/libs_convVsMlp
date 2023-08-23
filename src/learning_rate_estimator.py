@@ -41,6 +41,7 @@ def guess_learning_rate(fit_history: pd.DataFrame) -> float:
 def estimate_learnig_rate(
     base_model: functional.Functional,
     optimizer: optimizers.Optimizer,
+    optimizer_name: str,
     batch_size: int,
     train_data: tuple,
     results_path: Path,
@@ -55,13 +56,12 @@ def estimate_learnig_rate(
     save_fig: bool = True,
 ):
     # prepare saving the results
-    print(f'Estimating {optimizer.name}')
     results_path = results_path.joinpath(f'lr_estimates/{base_model.name}')
     if not results_path.is_dir():
         results_path.mkdir(parents=True)
-    save_path = results_path.joinpath(optimizer.name)
+    save_path = results_path.joinpath(optimizer_name)
     if save_path.exists() and not overwrite_existing:
-        print(f'Loading in training history for {optimizer.name}')
+        print(f'Loading in training history for {optimizer_name}')
         display(HTML(filename=save_path.with_suffix('.html')))
         return (None)
     # prepare the lr scheduler
@@ -117,7 +117,7 @@ def estimate_learnig_rate(
     fig.update_xaxes(type="log")
     fig.update_yaxes(type="log")
     fig.update_layout(
-        title=f'Model: {model.name}; Optimizer: {optimizer.name}',
+        title=f'Model: {model.name}; Optimizer: {optimizer_name}',
         font=dict(
             family="Courier New, monospace",
             size=18
