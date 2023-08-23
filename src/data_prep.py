@@ -143,13 +143,13 @@ if __name__ == '__main__':
             targets.loc[
                 bins['target'].isin(fold),
                 f"{cmd_args.compound}_Folds"
-            ] = int(ndx)
+            ] = ndx
 
-            targets[
-                f"{cmd_args.compound}_Folds"
-            ] = targets[
-                f"{cmd_args.compound}_Folds"
-            ].astype(np.int8)
+        targets[
+            f"{cmd_args.compound}_Folds"
+        ] = targets[
+            f"{cmd_args.compound}_Folds"
+        ].astype(np.int8)
 
     targets = targets.loc[data.index]
     targets = targets.loc[
