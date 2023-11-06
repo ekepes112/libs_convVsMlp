@@ -33,6 +33,24 @@ def cv_run(
     start_checkpoint_at: float,
     **kwargs
 ):
+    """
+    Runs a cross-validation experiment for a given model.
+
+    Args:
+        model_name (str): The name of the model.
+        fold (int): The fold number for cross-validation.
+        compound (str): The name of the compound.
+        predictors_path (str): The path to the predictors data.
+        targets_path (str): The path to the targets data.
+        lr_scan_params (dict): The parameters for learning rate estimation.
+        callbacks (list): The list of callbacks to use during training.
+        checkpoint_dir (str): The directory for saving checkpoints.
+        start_checkpoint_at (float): The threshold for initial checkpoint value.
+        **kwargs: Additional keyword arguments.
+
+    Returns:
+        None
+    """
     # prepare callbacks
     selected_callbacks = [x.strip() for x in callbacks.split(',')]
     callbacks = [cv_utils.ReinitializeWeights()]

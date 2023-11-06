@@ -15,6 +15,23 @@ class AlexNet1D():
         model_id: str = 'prototype',
         prediction_head_params: dict = {},
     ):
+        """
+        Initializes the AlexNet model with the given parameters modified for 1D input (LIBS spectra).
+
+        Args:
+            input_shape (tuple): The shape of the input data. Default is (None,).
+            optimizer (opt.Optimizer): The optimizer to use for training. Default is None.
+            loss_func (str): The loss function to use for training. Default is None.
+            eval_metrics (list): The evaluation metrics to use for evaluation. Default is an empty list.
+            model_id (str): The ID of the model. Default is 'prototype'.
+            prediction_head_params (dict): The parameters for the prediction head. Default is an empty dictionary.
+
+        Raises:
+            ValueError: If no loss function is specified.
+
+        Returns:
+            None
+        """
         if loss_func is None:
             raise ValueError('No loss function specified')
         if optimizer is None:
@@ -30,6 +47,12 @@ class AlexNet1D():
         self.model_id = f'alexnet_{model_id}'
 
     def build(self):
+        """
+        Builds and compiles the model defined at initialization.
+
+        Returns:
+            model (Model): A Keras Model object.
+        """
         model_input = Input(shape=self.input_shape)
         x = Conv1D(
             filters=32,  # lowered by a factor of 3 compared to the original work since we have 3 times fewer channels

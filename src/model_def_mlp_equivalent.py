@@ -17,6 +17,25 @@ class MLP():
         dropout_rate: float = 0.,
         prediction_head_params: dict = {},
     ):
+        """
+        Initializes the MLP model with the given parameters.
+
+        Args:
+            input_shape (tuple): The shape of the input data. Default is (None,).
+            hidden_layer_size (int): The size of the hidden layer. Default is 2048.
+            optimizer (opt.Optimizer): The optimizer to be used for training. Default is None.
+            loss_func (str): The loss function to be used for training. Default is None.
+            eval_metrics (list): The evaluation metrics to be used for evaluation. Default is an empty list.
+            model_id (str): The ID of the model. Default is 'prototype'.
+            dropout_rate (float): The dropout rate to be used. Default is 0.
+            prediction_head_params (dict): The parameters for the prediction head. Default is an empty dictionary.
+
+        Raises:
+            ValueError: If no loss function is specified.
+
+        Returns:
+            None
+        """
         if loss_func is None:
             raise ValueError('No loss function specified')
         if optimizer is None:
@@ -34,6 +53,12 @@ class MLP():
         self.model_id = f'mlp_{model_id}'
 
     def build(self):
+        """
+        Builds and compiles the model.
+
+        Returns:
+            model (Model): The compiled neural network model.
+        """
         model_input = Input(shape=self.input_shape)
         x = Flatten()(model_input)
         x = Dropout(self.dropout_rate)(x)

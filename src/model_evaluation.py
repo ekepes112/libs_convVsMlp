@@ -19,6 +19,21 @@ def evaluate_model(
     targets_path: str,
     **kwargs
 ):
+    """
+    Evaluates a trained model using the specified parameters.
+    The results of the evaluation are printed in the console.
+
+    Args:
+        model_name (str): The name of the model to be evaluated.
+        weights_path (str): The path to the weights file of the trained model.
+        compound (str): The compound to evaluate the model on.
+        predictors_path (str): The path to the file containing the predictors.
+        targets_path (str): The path to the file containing the targets.
+        **kwargs: Additional keyword arguments to be passed to the model.
+
+    Returns:
+        None
+    """
     print('##############################################################')
     print(f'processing:: {model_name}')
     # load the data
@@ -56,6 +71,7 @@ def evaluate_model(
         x=predictors.to_numpy()[...,np.newaxis],
         y=targets.loc[:,compound]
     )
+    return None
 
 
 if __name__ == '__main__':

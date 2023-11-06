@@ -15,6 +15,16 @@ from graph_utils import _update_layout
 
 
 def guess_learning_rate(fit_history: pd.DataFrame) -> float:
+    """
+    Given a pandas DataFrame `fit_history` containing the history of a model's fit,
+    this function guesses the optimal initial learning rate that resulted in the sharpest drop in loss.
+
+    Args:
+        fit_history (pd.DataFrame): A pandas DataFrame containing the history of a model's fit.
+
+    Returns:
+        float: The learning rate that resulted in the sharpest drop in loss.
+    """
     tresholded_losses = fit_history.loc[
         fit_history.loc[:, 'loss'] < (
             fit_history.loc[:, 'loss'].iloc[:10].max() * 0.9
@@ -39,7 +49,7 @@ def guess_learning_rate(fit_history: pd.DataFrame) -> float:
 
 
 def estimate_learnig_rate(
-    base_model: functional.Functional,
+    base_model,
     optimizer: optimizers.Optimizer,
     optimizer_name: str,
     batch_size: int,
@@ -55,6 +65,29 @@ def estimate_learnig_rate(
     training_verbosity: int = 0,
     save_fig: bool = True,
 ):
+    """
+    Estimate the learning rate for a given model and optimizer.
+
+    Parameters:
+        base_model: The base model to estimate the learning rate for.
+        optimizer: The optimizer to use for training the model.
+        optimizer_name: The name of the optimizer.
+        batch_size: The batch size to use during training.
+        train_data: The training data to use for training the model.
+        results_path: The path to save the results.
+        loss_function: The loss function to use for training the model.
+        end_lr: The end learning rate for the learning rate scheduler.
+        step_size: The step size for the learning rate scheduler.
+        warmup_count: The number of warmup epochs for the learning rate scheduler.
+        clone_model: Whether to clone the base model or not.
+        overwrite_existing: Whether to overwrite existing training history or not.
+        return_data: Whether to return the training history data or not.
+        training_verbosity: The verbosity level for training.
+        save_fig: Whether to save the learning curve figure or not.
+
+    Returns:
+        If return_data is True, returns the training history data.
+    """
     # prepare saving the results
     results_path = results_path.joinpath(f'lr_estimates/{base_model.name}')
     if not results_path.is_dir():
