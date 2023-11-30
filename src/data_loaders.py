@@ -112,7 +112,7 @@ def download_mars_calibration_data(
     if data_type == 'supercam':
         data_name = 'supercam-calibration-dataset-20221218'
     data_url = f"erikkepes/{data_name}"
-    !kaggle datasets download "$data_url"
+    os.system(f"kaggle datasets download {data_url}")
     shutil.unpack_archive(
         f"{data_name}.zip",
         data_path,
