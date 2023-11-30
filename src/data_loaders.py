@@ -90,9 +90,9 @@ def copy_kaggle_api_key() -> None:
     if not kaggle_target_path.exists():
         shutil.copyfile(
             get_kaggle_key_source_path(),
-            get_kaggle_key_target_dir(),
+            kaggle_target_path,
         )
-        os.chmod(get_kaggle_key_target_dir(), 600)
+        os.chmod(kaggle_target_path, 600)
     return None
 
 def download_mars_calibration_data(
