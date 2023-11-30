@@ -29,18 +29,18 @@ def generate_folds(
     concentrations: pd.DataFrame,
     fold_count: int
 ) -> tuple[list,pd.DataFrame]:
-	"""
-	Generate folds based on concentrations and fold count.
+    """
+    Generate folds based on concentrations and fold count.
 
-	Parameters:
-	    concentrations (pd.DataFrame): A pandas DataFrame representing the concentrations.
-	    fold_count (int): An integer representing the number of folds.
+    Parameters:
+        concentrations (pd.DataFrame): A pandas DataFrame representing the concentrations.
+        fold_count (int): An integer representing the number of folds.
 
-	Returns:
-	    fold_concentrations (list): A list of pandas Series representing the concentrations for each fold.
-	    concentration_bins (pd.DataFrame): A pandas DataFrame with the bin and target columns.
+    Returns:
+        fold_concentrations (list): A list of pandas Series representing the concentrations for each fold.
+        concentration_bins (pd.DataFrame): A pandas DataFrame with the bin and target columns.
 
-	"""
+    """
     concentration_bins = pd.cut(
         concentrations,
         bins=100//fold_count,
