@@ -14,12 +14,33 @@ import graph_utils
 
 
 def get_target_from_spectrum_id(spectrum_id: str):
+    """
+    Returns the target ID extracted from a given spectrum ID.
+
+    Parameters:
+        spectrum_id (str): The spectrum ID from which the target ID is to be extracted.
+
+    Returns:
+        str: The target ID extracted from the spectrum ID.
+    """
     return re.sub('^[0-9]{1,}_','',spectrum_id)
 
 def generate_folds(
     concentrations: pd.DataFrame,
     fold_count: int
-):
+) -> tuple[list,pd.DataFrame]:
+	"""
+	Generate folds based on concentrations and fold count.
+
+	Parameters:
+	    concentrations (pd.DataFrame): A pandas DataFrame representing the concentrations.
+	    fold_count (int): An integer representing the number of folds.
+
+	Returns:
+	    fold_concentrations (list): A list of pandas Series representing the concentrations for each fold.
+	    concentration_bins (pd.DataFrame): A pandas DataFrame with the bin and target columns.
+
+	"""
     concentration_bins = pd.cut(
         concentrations,
         bins=100//fold_count,
@@ -65,9 +86,6 @@ def generate_folds(
 
 
 if __name__ == '__main__':
-    DRIVE_PATH = Path(config.DRIVE_PATH)
-    DATA_PATH = DRIVE_PATH.joinpath(config.DATA_PATH)
-
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument(
         '--dataset',
@@ -77,23 +95,23 @@ if __name__ == '__main__':
         '--compound',
         type=str,
     )
+    argument_parser.add_argument(
+        '--dir',
+        type=str,
+    )
 
     cmd_args = argument_parser.parse_args()
 
+    if cmd_args.dataset in ['supercam','chemcam']:
+        data, wvl, targets = data_loaders.load_old_mars_calibration(
+            cmd_args.dir
+        )
     if cmd_args.dataset == 'supercam':
         import config_supercam
-        data, wvl, targets = data_loaders.load_supercam_old(
-            DATA_PATH,
-            config.DATASET_TYPE
-        )
         wvl_mask = config_supercam.WVL_MASKS
         spectral_ranges = config_supercam.SPECTRAL_RANGES
     elif cmd_args.dataset == 'chemcam':
         import config_chemcam
-        data, wvl, targets = data_loaders.load_chemcam_old(
-            DATA_PATH,
-            config.DATASET_TYPE
-        )
         wvl_mask = config_chemcam.WVL_MASKS
         spectral_ranges = config_chemcam.SPECTRAL_RANGES
     else:
