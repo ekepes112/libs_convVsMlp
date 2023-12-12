@@ -25,7 +25,7 @@ def mask_wvl(
         keep_mask[
             np.where((wvl >= mask[0]) & (wvl <= mask[1]))
         ] = False
-    return(keep_mask)
+    return keep_mask
 
 
 def normalize_area(
@@ -49,4 +49,4 @@ def normalize_area(
           axis=0
       )
 
-    return(spectra)
+    return spectra
